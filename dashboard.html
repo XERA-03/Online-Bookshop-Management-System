@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Book Haven</title>
+    <style>
+        :root {
+            --color-primary: #968C83;
+            --color-secondary: #D6D2C4;
+            --color-background: #FFF5EA;
+            --color-accent: #F7DAD9;
+            --color-text: #333333;
+            --color-light-text: #666666;
+            --color-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+         /* Header Styles */
+         header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .logo span {
+            color: var(--color-accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--color-primary);
+        }
+        
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-icon {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-accent);
+            color: var(--color-text);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .login-btn {
+            margin-left: 20px;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: #877e75;
+        }
+        
+        
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--color-secondary);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--color-accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-white);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            font-size: 14px;
+            color: var(--color-light-text);
+        }
+
+        .dashboard-nav {
+            background-color: var(--color-secondary);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-tabs li {
+            flex: 1;
+        }
+
+        .nav-tabs li a {
+            display: block;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs li a.active {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: 8px;
+        }
+
+        .nav-tabs li a:hover:not(.active) {
+            background-color: var(--color-accent);
+            border-radius: 8px;
+        }
+
+        .dashboard-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        .content-main {
+            flex: 2;
+        }
+
+        .content-sidebar {
+            flex: 1;
+        }
+
+        .dashboard-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-card h2 {
+            margin-bottom: 20px;
+            color: var(--color-primary);
+            font-size: 20px;
+            border-bottom: 1px solid var(--color-secondary);
+            padding-bottom: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--color-secondary);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-image {
+            width: 80px;
+            height: 120px;
+            background-color: var(--color-secondary);
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+
+        .order-details {
+            flex: 1;
+        }
+
+        .order-details h4 {
+            margin-bottom: 5px;
+        }
+
+        .order-details p {
+            font-size: 14px;
+            color: var(--color-light-text);
+            margin-bottom: 5px;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-delivered {
+            background-color: #e0f7e0;
+            color: #2e7d32;
+        }
+
+        .status-processing {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .wishlist-item {
+            background-color: var(--color-secondary);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .wishlist-image {
+            width: 60px;
+            height: 90px;
+            background-color: var(--color-white);
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+
+        .wishlist-details h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .wishlist-details p {
+            font-size: 14px;
+            color: var(--color-text);
+        }
+
+        .address-card {
+            background-color: var(--color-secondary);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .address-card h4 {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .address-card h4 span {
+            font-size: 12px;
+            background-color: var(--color-accent);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .address-card p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #857a71;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .reading-progress {
+            height: 15px;
+            background-color: var(--color-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--color-accent);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                flex-direction: column;
+            }
+            
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .nav-tabs li {
+                flex: auto;
+                width: 50%;
+            }
+        }
+    </style>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><a href="homepage.html">Book<span>Haven</span></a></div>
+                <nav>
+                    <ul>
+                        <li><a href="homepage.html" class="active">Home</a></li>
+                        <li><a href="productandcatagory.html">Categories</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-icons">
+                    <div class="cart-icon" onclick="openCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <button class="login-btn" onclick="goToLogin()">Login</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">Book Haven</div>
+            <div class="user-info">
+                <div class="user-avatar">AM</div>
+                <div class="user-details">
+                    <h3>Arpita Mishra</h3>
+                    <p>mishrarpita@example.com</p>
+                </div>
+            </div>
+        </header>
+
+        <nav class="dashboard-nav">
+            <ul class="nav-tabs">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">My Orders</a></li>
+                <li><a href="#">Wishlist</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-content">
+            <main class="content-main">
+                <section class="dashboard-card">
+                    <h2>Recent Orders</h2>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>The Great Gatsby</h4>
+                            <p>Order #BH3982 - March 5, 2025</p>
+                            <p>$14.99</p>
+                            <span class="order-status status-delivered">Delivered</span>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-outline">Write Review</a>
+                                <a href="#" class="btn">Buy Again</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>To Kill a Mockingbird</h4>
+                            <p>Order #BH3975 - March 10, 2025</p>
+                            <p>$12.50</p>
+                            <span class="order-status status-processing">Processing</span>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-outline">Track Order</a>
+                                <a href="#" class="btn btn-outline">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>1984</h4>
+                            <p>Order #BH3965 - February 28, 2025</p>
+                            <p>$10.99</p>
+                            <span class="order-status status-delivered">Delivered</span>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-outline">Write Review</a>
+                                <a href="#" class="btn">Buy Again</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-card">
+                    <h2>Currently Reading</h2>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>Dune</h4>
+                            <p>Frank Herbert</p>
+                            <p>Page 246 of 412</p>
+                            <div class="reading-progress">
+                                <div class="progress-bar" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>Project Hail Mary</h4>
+                            <p>Andy Weir</p>
+                            <p>Page 112 of 496</p>
+                            <div class="reading-progress">
+                                <div class="progress-bar" style="width: 22%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-card">
+                    <h2>Wishlist</h2>
+                    <div class="wishlist-grid">
+                        <div class="wishlist-item">
+                            <div class="wishlist-image"></div>
+                            <div class="wishlist-details">
+                                <h4>The Hobbit</h4>
+                                <p>$16.99</p>
+                            </div>
+                        </div>
+                        <div class="wishlist-item">
+                            <div class="wishlist-image"></div>
+                            <div class="wishlist-details">
+                                <h4>Pride and Prejudice</h4>
+                                <p>$9.99</p>
+                            </div>
+                        </div>
+                        <div class="wishlist-item">
+                            <div class="wishlist-image"></div>
+                            <div class="wishlist-details">
+                                <h4>The Alchemist</h4>
+                                <p>$11.50</p>
+                            </div>
+                        </div>
+                        <div class="wishlist-item">
+                            <div class="wishlist-image"></div>
+                            <div class="wishlist-details">
+                                <h4>The Midnight Library</h4>
+                                <p>$18.99</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons" style="justify-content: center; margin-top: 20px;">
+                        <a href="#" class="btn">View All Wishlist Items</a>
+                    </div>
+                </section>
+            </main>
+
+            <aside class="content-sidebar">
+                <section class="dashboard-card">
+                    <h2>Account Summary</h2>
+                    <p><strong>Member Since:</strong> January 15, 2025</p>
+                    <p><strong>Membership Level:</strong> Gold Reader</p>
+                    <p><strong>Points Balance:</strong> 450 pts</p>
+                    <p><strong>Books Purchased:</strong> 17</p>
+                    <div class="action-buttons" style="justify-content: center; margin-top: 20px;">
+                        <a href="#" class="btn">Redeem Points</a>
+                    </div>
+                </section>
+
+                <section class="dashboard-card">
+                    <h2>Shipping Addresses</h2>
+                    <div class="address-card">
+                        <h4>Home <span>Default</span></h4>
+                        <p>123 Book Street</p>
+                        <p>Readerville, NY 12345</p>
+                        <p>United States</p>
+                    </div>
+                    <div class="address-card">
+                        <h4>Work</h4>
+                        <p>456 Literature Avenue</p>
+                        <p>Bookland, CA 67890</p>
+                        <p>United States</p>
+                    </div>
+                    <div class="action-buttons" style="justify-content: center;">
+                        <a href="#" class="btn btn-outline">Add New Address</a>
+                    </div>
+                </section>
+
+                <section class="dashboard-card">
+                    <h2>Reading Recommendations</h2>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>The Song of Achilles</h4>
+                            <p>Madeline Miller</p>
+                            <p>$14.99</p>
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image"></div>
+                        <div class="order-details">
+                            <h4>Circe</h4>
+                            <p>Madeline Miller</p>
+                            <p>$15.99</p>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+</body>
+</html>

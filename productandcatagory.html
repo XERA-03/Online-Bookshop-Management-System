@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHaven - Browse Books</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #968C83;
+            --color-secondary: #D6D2C4;
+            --color-background: #FFF5EA;
+            --color-accent: #F7DAD9;
+            --color-text: #333333;
+            --color-light-text: #666666;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .logo span {
+            color: var(--color-accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--color-primary);
+        }
+        
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-icon {
+            position: relative;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-accent);
+            color: var(--color-text);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .login-btn {
+            margin-left: 20px;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: #877e75;
+        }
+        
+        /* Page Title */
+        .page-title {
+            background-color: var(--color-secondary);
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title h1 {
+            font-size: 36px;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumbs {
+            color: var(--color-light-text);
+        }
+        
+        .breadcrumbs a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Shop Layout */
+        .shop-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .widget {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .widget-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--color-secondary);
+            color: var(--color-primary);
+        }
+        
+        .category-list {
+            list-style: none;
+        }
+        
+        .category-list li {
+            margin-bottom: 10px;
+        }
+        
+        .category-list li a {
+            display: flex;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: color 0.3s;
+        }
+        
+        .category-list li a:hover {
+            color: var(--color-primary);
+        }
+        
+        .category-count {
+            background-color: var(--color-secondary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .price-filter {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .price-inputs input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .filter-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background-color: #877e75;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            background-color: var(--color-secondary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        
+        .tag:hover {
+            background-color: var(--color-accent);
+        }
+        
+        /* Products */
+        .products-container {
+            flex: 1;
+        }
+        
+        .products-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .products-count {
+            color: var(--color-light-text);
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .view-option {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-option.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .sort-select {
+            padding: 8px 30px 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            cursor: pointer;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .book-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .book-image {
+            height: 250px;
+            background-color: var(--color-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-actions {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: bottom 0.3s;
+        }
+        
+        .book-card:hover .book-actions {
+            bottom: 0;
+        }
+        
+        .book-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .book-action-btn:hover {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .book-info {
+            padding: 15px;
+        }
+        
+        .book-category {
+            font-size: 12px;
+            color: var(--color-light-text);
+            margin-bottom: 5px;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .book-author {
+            color: var(--color-light-text);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .book-price {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .add-to-cart {
+            display: block;
+            width: 100%;
+            background-color: var(--color-accent);
+            border: none;
+            padding: 8px 0;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #f0c4c3;
+        }
+        
+        /* Products List View */
+        .products-list {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .list-book-card {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .list-book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .list-book-image {
+            width: 200px;
+            height: 280px;
+            background-color: var(--color-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text);
+            flex-shrink: 0;
+        }
+        
+        .list-book-info {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .list-book-header {
+            margin-bottom: 10px;
+        }
+        
+        .list-book-category {
+            font-size: 12px;
+            color: var(--color-light-text);
+            margin-bottom: 5px;
+        }
+        
+        .list-book-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .list-book-author {
+            color: var(--color-light-text);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .list-book-description {
+            flex: 1;
+            margin-bottom: 15px;
+            color: var(--color-light-text);
+            line-height: 1.5;
+        }
+        
+        .list-book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-book-price {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--color-primary);
+        }
+        
+        .list-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination-list {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+        }
+        
+        .pagination-item a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s;
+        }
+        
+        .pagination-item a:hover {
+            background-color: var(--color-secondary);
+        }
+        
+        .pagination-item.active a {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        /* Category Page Banner */
+        .category-banner {
+            background-color: var(--color-accent);
+            padding: 60px 0;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .category-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        .category-banner h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .category-banner p {
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Single Product Page */
+        .product-detail {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .product-gallery {
+            width: 45%;
+        }
+        
+        .product-main-image {
+            height: 450px;
+            background-color: var(--color-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        .product-thumbnail:hover {
+            opacity: 0.8;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-category {
+            color: var(--color-light-text);
+            margin-bottom: 5px;
+        }
+        
+        .product-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .product-author {
+            font-size: 16px;
+            color: var(--color-light-text);
+            margin-bottom: 15px;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stars {
+            color: #FFD700;
+            margin-right: 10px;
+        }
+        
+        .review-count {
+            color: var(--color-light-text);
+        }
+        
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+        
+        .product-description {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: var(--color-light-text);
+        }
+        
+        .product-meta {
+            margin-bottom: 30px;
+        }
+        
+        .meta-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .meta-label {
+            width: 120px;
+            font-weight: 600;
+        }
+        
+        .add-to-cart-section {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        
+        .quantity {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 45px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: var(--color-secondary);
+        }
+        
+        .quantity-input {
+            width: 50px;
+            height: 45px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .add-to-cart-btn {
+            flex: 1;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart-btn:hover {
+            background-color: #877e75;
+        }
+        
+        .wishlist-btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wishlist-btn:hover {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+        
+        .product-tabs {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 60px;
+        }
+        
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            border-right: 1px solid #ddd;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-button.active {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Related Books */
+        .related-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--color-primary);
+        }
+        
+        .related-books {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--color-accent);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--color-accent);
+            color: var(--color-text);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #ddd;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .shop-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .product-detail {
+                flex-direction: column;
+            }
+            
+            .product-gallery {
+                width: 100%;
+            }
+            
+            .related-books {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px 10px;
+            }
+            
+            .nav-icons {
+                margin-top: 20px;
+            }
+            
+            .products-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .list-book-card {
+                flex-direction: column;
+            }
+            
+            .list-book-image {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><a href="homepage.html">Book<span>Haven</span></a></div>
+                <nav>
+                    <ul>
+                        <li><a href="homepage.html" class="active">Home</a></li>
+                        <li><a href="productandcatagory.html">Categories</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-icons">
+                    <div class="cart-icon" onclick="openCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <button class="login-btn" onclick="goToLogin()">Login</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <div class="page-title">
+        <div class="container">
+            <h1>Browse Books</h1>
+            <div class="breadcrumbs">
+                <a href="homepage.html">Home</a> / <span>Shop</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Section -->
+    <div class="container">
+        <div class="shop-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="widget">
+                    <h3 class="widget-title">Categories</h3>
+                    <ul class="category-list">
+                        <li><a href="#">Fiction <span class="category-count">125</span></a></li>
+                        <li><a href="#">Non-Fiction <span class="category-count">87</span></a></li>
+                        <li><a href="#">Mystery & Thriller <span class="category-count">56</span></a></li>
+                        <li><a href="#">Science Fiction <span class="category-count">43</span></a></li>
+                        <li><a href="#">Romance <span class="category-count">38</span></a></li>
+                        <li><a href="#">Fantasy <span class="category-count">29</span></a></li>
+                        <li><a href="#">Biography <span class="category-count">25</span></a></li>
+                        <li><a href="#">Self-Help <span class="category-count">19</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="widget">
+                    <h3 class="widget-title">Filter by Price</h3>
+                    <div class="price-filter">
+                        <div class="price-inputs">
+                            <input type="number" placeholder="Min">
+                            <input type="number" placeholder="Max">
+                        </div>
+                        <button class="filter-btn">Apply Filter</button>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h3 class="widget-title">Popular Tags</h3>
+                    <div class="tags">
+                        <span class="tag">Bestseller</span>
+                        <span class="tag">Award Winner</span>
+                        <span class="tag">New Release</span>
+                        <span class="tag">Classic</span>
+                        <span class="tag">Audiobook</span>
+                        <span class="tag">E-book</span>
+                        <span class="tag">Paperback</span>
+                        <span class="tag">Hardcover</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="products-container">
+                <div class="products-top">
+                    <div class="products-count">Showing 1-9 of 56 results</div>
+                    <div class="sort-options">
+                        <div class="view-options">
+                            <div class="view-option active" id="grid-view">
+                                <i class="fas fa-th"></i>
+                            </div>
+                            <div class="view-option" id="list-view">
+                                <i class="fas fa-list"></i>
+                            </div>
+                        </div>
+                        <select class="sort-select">
+                            <option>Sort by: Default</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Newest First</option>
+                            <option>Popularity</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="products-grid">
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Fiction</div>
+                            <h3 class="book-title">The Silent Echo</h3>
+                            <div class="book-author">By Sarah Johnson</div>
+                            <div class="book-price">$19.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Mystery & Thriller</div>
+                            <h3 class="book-title">Dark Horizons</h3>
+                            <div class="book-author">By Michael Roberts</div>
+                            <div class="book-price">$22.50</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Science Fiction</div>
+                            <h3 class="book-title">Beyond the Stars</h3>
+                            <div class="book-author">By Jessica Wong</div>
+                            <div class="book-price">$17.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Romance</div>
+                            <h3 class="book-title">Whispers in the Rain</h3>
+                            <div class="book-author">By Emma Clark</div>
+                            <div class="book-price">$15.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Fantasy</div>
+                            <h3 class="book-title">The Crystal Kingdom</h3>
+                            <div class="book-author">By Daniel Green</div>
+                            <div class="book-price">$24.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Biography</div>
+                            <h3 class="book-title">Path of Resilience</h3>
+                            <div class="book-author">By Thomas Wilson</div>
+                            <div class="book-price">$21.50</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Self-Help</div>
+                            <h3 class="book-title">The Art of Mindfulness</h3>
+                            <div class="book-author">By Amanda Lee</div>
+                            <div class="book-price">$18.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Fiction</div>
+                            <h3 class="book-title">The Forgotten Garden</h3>
+                            <div class="book-author">By Robert Anderson</div>
+                            <div class="book-price">$20.99</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-image">
+                            Book Cover
+                            <div class="book-actions">
+                                <div class="book-action-btn"><i class="fas fa-eye"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-heart"></i></div>
+                                <div class="book-action-btn"><i class="fas fa-sync-alt"></i></div>
+                            </div>
+                        </div>
+                        <div class="book-info">
+                            <div class="book-category">Non-Fiction</div>
+                            <h3 class="book-title">The Hidden Universe</h3>
+                            <div class="book-author">By Laura Chen</div>
+                            <div class="book-price">$26.50</div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-book-card">
+                    <div class="list-book-image">Book Cover</div>
+                    <div class="list-book-info">
+                        <div class="list-book-header">
+                            <div class="list-book-category">Mystery & Thriller</div>
+                            <h3 class="list-book-title">Dark Horizons</h3>
+                            <div class="list-book-author">By Michael Roberts</div>
+                        </div>
+                        <div class="list-book-description">
+                            A gripping thriller that will keep you on the edge of your seat. When a series of unexplained events plague a small town, a determined detective must face their own demons to solve the mystery.
+                        </div>
+                        <div class="list-book-footer">
+                            <div class="list-book-price">$22.50</div>
+                            <div class="list-actions">
+                                <button class="book-action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="book-action-btn"><i class="fas fa-heart"></i></button>
+                                <button class="book-action-btn"><i class="fas fa-sync-alt"></i></button>
+                                <button class="add-to-cart">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>

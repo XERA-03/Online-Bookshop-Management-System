@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHaven - Login/Signup</title>
+    <style>
+        :root {
+            --color-primary: #968C83;
+            --color-secondary: #D6D2C4;
+            --color-background: #FFF5EA;
+            --color-accent: #F7DAD9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/simpleicons.svg');
+            background-size: 200px;
+            background-repeat: repeat;
+            background-blend-mode: soft-light;
+        }
+        
+        .container {
+            display: flex;
+            width: 900px;
+            height: 600px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .image-side {
+            flex: 1;
+            background-color: var(--color-accent);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-side::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/400/600');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+        
+        .tagline {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+            z-index: 1;
+        }
+        
+        .features {
+            z-index: 1;
+        }
+        
+        .features ul {
+            list-style-type: none;
+        }
+        
+        .features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features li::before {
+            content: "✓";
+            margin-right: 10px;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+        
+        .form-side {
+            flex: 1;
+            background-color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-controls {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+        }
+        
+        .form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .form.active {
+            display: flex;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        
+        button[type="submit"] {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #877e75;
+        }
+        
+        .separator {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+        
+        .separator .line {
+            flex: 1;
+            height: 1px;
+            background-color: #ddd;
+        }
+        
+        .separator .text {
+            padding: 0 10px;
+            color: #888;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            background-color: var(--color-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 100%;
+                height: auto;
+                border-radius: 0;
+            }
+            
+            .image-side {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-side">
+            <div class="logo">BookHaven</div>
+            <p class="tagline">Your journey through thousands of worlds begins here.</p>
+            <div class="features">
+                <ul>
+                    <li>Access to over 10,000 book titles</li>
+                    <li>Exclusive member discounts</li>
+                    <li>Personalized book recommendations</li>
+                    <li>Track your reading journey</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-side">
+            <div class="tab-controls">
+                <button class="tab-btn active" data-target="login-form">Login</button>
+                <button class="tab-btn" data-target="signup-form">Sign Up</button>
+            </div>
+            <div class="form-container">
+                <form id="login-form" class="form active">
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="submit">Login</button>
+                    <div class="separator">
+                        <div class="line"></div>
+                        <div class="text">OR</div>
+                        <div class="line"></div>
+                    </div>
+                    <div class="social-login">
+                        <div class="social-btn">G</div>
+                        <div class="social-btn">f</div>
+                        <div class="social-btn">in</div>
+                    </div>
+                </form>
+                <form id="signup-form" class="form">
+                    <div class="input-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-confirm">Confirm Password</label>
+                        <input type="password" id="signup-confirm" required>
+                    </div>
+                    <button type="submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const forms = document.querySelectorAll('.form');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and forms
+                tabBtns.forEach(b => b.classList.remove('active'));
+                forms.forEach(f => f.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Show corresponding form
+                const targetForm = document.getElementById(btn.dataset.target);
+                targetForm.classList.add('active');
+            });
+        });
+        
+        // Form submission handling
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // For demonstration - in a real application, you would send this to your backend
+            console.log('Login attempt:', { email, password });
+            alert('Login functionality would connect to backend here');
+            // Redirect to home page after successful login
+            // window.location.href = 'home.html';
+        });
+        
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // For demonstration - in a real application, you would send this to your backend
+            console.log('Signup attempt:', { name, email, password });
+            alert('Signup functionality would connect to backend here');
+            // Redirect to home page or login page after successful signup
+            // window.location.href = 'home.html';
+        });
+    </script>
+</body>
+</html>
